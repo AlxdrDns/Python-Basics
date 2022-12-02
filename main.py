@@ -7,13 +7,26 @@
 import sys
 
 
-clientes = ['Pablo', 'Ricardo']
+clientes = [
+    {
+        'nombre': 'Pablo',
+        'empresa': 'Google',
+        'email': 'pablo@google.com',
+        'posicion': 'Software Engineer'
+    },
+    {
+        'nombre': 'Ricardo',
+        'empresa': 'Facebook',
+        'email': 'ricardo@facebook.com',
+        'posicion': 'Data Engineer'
+    }
+]
 
 
-def crear_cliente(nombre_cliente):
+def crear_cliente(cliente):
     global clientes
-    if nombre_cliente not in clientes:
-        clientes.append(nombre_cliente)
+    if cliente not in clientes:
+        clientes.append(cliente)
     else:
         print('El cliente ya está en la lista')
 
@@ -46,7 +59,12 @@ def buscar_cliente(nombre_cliente):
 
 def listar_clientes():
     for idx, cliente in enumerate(clientes):
-        print('{}: {}'.format(idx, cliente))
+        print('{uid} | {nombre} | {empresa} | {email} | {posicion}'.format(
+            uid=idx, 
+            nombre=cliente['nombre'],
+            empresa=cliente['empresa'],
+            email=cliente['email'],
+            posicion=cliente['posicion']))
 
 
 def _imprimir_bienvenida():
@@ -59,7 +77,14 @@ def _imprimir_bienvenida():
     print('[B]uscar un cliente')
 
 
-def _get_nombre_cliente():
+def _get_campo_cliente(nombre_campo):
+    campo = None
+    while not campo:
+        campo = input('Cuál es el cliente {}?'.format(nombre_campo))
+    return campo
+
+
+""" def _get_nombre_cliente():
     nombre_cliente = None
     while not nombre_cliente:
         nombre_cliente = input('Cuál es el nombre del cliente?')
@@ -68,7 +93,7 @@ def _get_nombre_cliente():
             break
     if not nombre_cliente:
             sys.exit()
-    return nombre_cliente
+    return nombre_cliente """
 
 
 if __name__ == '__main__':
@@ -76,8 +101,13 @@ if __name__ == '__main__':
     comando = input()
     comando = comando.upper()
     if comando == 'C':
-        nombre_cliente = _get_nombre_cliente()
-        crear_cliente(nombre_cliente)
+        cliente = {
+            'nombre': _get_campo_cliente('nombre'),
+            'empresa': _get_campo_cliente('empresa'),
+            'email': _get_campo_cliente('email'),
+            'posicion': _get_campo_cliente('posicion')
+        }
+        crear_cliente(cliente)
         listar_clientes()
     elif comando == 'E':
         nombre_cliente = _get_nombre_cliente()
