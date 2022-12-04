@@ -4,23 +4,29 @@
 #(D)elete
 
 
-import sys
+import csv
+import os
 
 
-clientes = [
-    {
-        'nombre': 'Pablo',
-        'empresa': 'Google',
-        'email': 'pablo@google.com',
-        'puesto': 'Software Engineer'
-    },
-    {
-        'nombre': 'Ricardo',
-        'empresa': 'Facebook',
-        'email': 'ricardo@facebook.com',
-        'puesto': 'Data Engineer'
-    }
-]
+TABLA_CLIENTES = 'clientes.csv'
+ESQUEMA_CLIENTES = ['nombre', 'empresa', 'email', 'puesto']
+clientes = []
+
+
+def _inicializar_clientes_desde_csv():
+    with open(TABLA_CLIENTES, mode='r') as f:
+        reader = csv.DictReader(f, fieldnames=ESQUEMA_CLIENTES)
+        for row in reader:
+            clientes.append(row)
+
+
+def _guardar_clientes_hacia_csv():
+    tmp_nombre_tabla = '{}.tmp'.format(TABLA_CLIENTES)
+    with open(tmp_nombre_tabla, mode='w') as f:
+        writer = csv.DictWriter(f, fieldnames=ESQUEMA_CLIENTES)
+        writer.writerows(clientes)
+        os.remove(TABLA_CLIENTES)
+    os.rename(tmp_nombre_tabla, TABLA_CLIENTES)
 
 
 def crear_cliente(cliente):
@@ -97,24 +103,22 @@ def _get_cliente_desde_usuario():
 
 
 if __name__ == '__main__':
+    _inicializar_clientes_desde_csv()
     _imprimir_bienvenida()
     comando = input()
     comando = comando.upper()
     if comando == 'C':
         cliente = _get_cliente_desde_usuario()
         crear_cliente(cliente)
-        listar_clientes()
     elif comando == 'L':
         listar_clientes()
     elif comando == 'A':
         id_cliente = int(_get_campo_cliente('id'))
         cliente_actualizado = _get_cliente_desde_usuario()
         actualizar_cliente(id_cliente, cliente_actualizado)
-        listar_clientes()
     elif comando == 'E':
         id_cliente = int(_get_campo_cliente('id'))
         borrar_cliente(id_cliente)
-        listar_clientes()
     elif comando == 'B':
         nombre_cliente = _get_campo_cliente('nombre')
         busqueda = buscar_cliente(nombre_cliente)
@@ -122,6 +126,6 @@ if __name__ == '__main__':
             print('El cliente si está en la lista de clientes')
         else:
             print('El cliente: {} no está en la lista de clientes'.format(nombre_cliente))
-        listar_clientes()
     else:
         print('Comando inválido')
+    _guardar_clientes_hacia_csv()
