@@ -2,7 +2,7 @@
 class CasillaDeVotacion:
 
     def __init__(self, identificador, pais):
-        self.__identificador = identificador #
+        self.__identificador = identificador
         self.__pais = pais
         self.__region = None
 

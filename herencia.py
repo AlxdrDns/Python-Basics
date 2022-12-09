@@ -8,6 +8,7 @@ class Rectangulo:
     def area(self): #Método de la clase Rectangulo
         return self.base * self.altura
 
+
 class Cuadrado(Rectangulo): #La clase Cuadrado extiende la clase Rectángulo
 
     def __init__(self, lado): #Constructor de la clase Cuadrado
@@ -19,4 +20,4 @@ if __name__ == '__main__':
     print(rectangulo.area())
 
     cuadrado = Cuadrado(lado=5)
-    print(cuadrado.area())
+    print(cuadrado.area()) #Heredo el método area() de la clase Rectangulo
